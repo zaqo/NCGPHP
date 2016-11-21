@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<title>Форма</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+		
+		<link rel="stylesheet" type="text/css" href="/prod/css/style.css" />
+		<!--[if lt IE 9]> 
+			<script type="text/javascript" src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<!--<script type="text/javascript" src="./js/jquery.js"></script>-->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	</head>
+	<body>
+	 <div class="dropdown">
+		<button onclick="myFunction()" class="dropbtn">Меню</button>
+		<div id="myDropdown" class="dropdown-content">
+			<a href="/prod/index.html">By airport</a>
+			
+		</div>
+	</div>
+	 <script>
+	
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+	function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+	}
+
+// Close the dropdown if the user clicks outside of it
+	window.onclick = function(event) {
+		if (!event.target.matches('.dropbtn')) {
+
+			var dropdowns = document.getElementsByClassName("dropdown-content");
+			var i;
+			for (i = 0; i < dropdowns.length; i++) {
+			var openDropdown = dropdowns[i];
+				if (openDropdown.classList.contains('show')) {
+					openDropdown.classList.remove('show');
+				}
+			}
+		}
+	
+	}
+	</script> 
+		<h1>ИНФОРМАЦИЯ ПО АВИАКОМПАНИИ</h1>
+		
+		<form id="form" method="post" action="start_by_carrier.php" >
+			<p>CARRIER:</p>
+			<div id="carrier"><label><p>Brand: 	
+				<select name="carrier" id="airplane" class="air_carrier" >
+				<option value="К07814">Россия</option>
+				<option value="К01974">Аэрофлот</option>
+				<option value="К02734">ЮТэйр</option>
+				<option value="К09991">Победа</option>
+				<option value="К01754">S7</option>
+				<option value="К02852">Lufthansa</option>
+				<option value="К03164">Air France</option>
+				<option value="К03169">British Airways</option>
+				<option value="К03179">SAS</option>
+				<option value="К08262">Emirates</option>
+				<option value="К02748">LOT</option>
+				<option value="К02753">Finnair</option>
+				</select></p></label>
+			
+			</div>
+		 	<p>FROM:</p>
+			<div id="month_fr"><label><p>Month: 	
+				<select name="month_from" id="mfr" class="date" >
+				<option value="1">Январь</option>
+				<option value="2">Февраль</option>
+				<option value="3">Март</option>
+				<option value="4">Апрель</option>
+				<option value="5">Май</option>
+				<option value="6">Июнь</option>
+				<option value="7">Июль</option>
+				<option value="8">Август</option>
+				<option value="9">Сентябрь</option>
+				<option value="10">Октябрь</option>
+				<option value="11">Ноябрь</option>
+				<option value="12">Декабрь</option>
+				</select></p></label>
+			
+			</div>
+			<p>Year: <select name="year_from" id="yfr" class="date" >
+				<option value="0">2012</option>
+				<option value="1">2013</option>
+				<option value="2">2014</option>
+				<option value="3">2015</option>
+				<option value="4">2016</option>
+				</select></p>
+			<p>TO:</p>
+			<p>Month: <select id="mto" name="month_to" class="date" >
+				<option value="1">Январь</option>
+				<option value="2">Февраль</option>
+				<option value="3">Март</option>
+				<option value="4">Апрель</option>
+				<option value="5">Май</option>
+				<option value="6">Июнь</option>
+				<option value="7">Июль</option>
+				<option value="8">Август</option>
+				<option value="9">Сентябрь</option>
+				<option value="10">Октябрь</option>
+				<option value="11">Ноябрь</option>
+				<option value="12">Декабрь</option>
+				</select></p></label></p>
+			<p>Year: <select name="year_to" id="yto" class="date" >
+				<option value="0">2012</option>
+				<option value="1">2013</option>
+				<option value="2">2014</option>
+				<option value="3">2015</option>
+				<option value="4">2016</option>
+				</select></p>
+			</p>
+			<p><div id="errors"></div></p>	
+			<p><input type="submit" name="send" class="send" value="ВВОД"></p>
+		</form>
+		
+		<script>
+		$('form').submit(function(event){
+			var year_cond =($("#yto").val()<$("#yfr").val());
+			var year_cond_eq =($("#yto").val()===$("#yfr").val());
+			var month_cond =($("#mfr").val()>$("#mto").val());
+			if (year_cond){
+				  $( "#errors" ).text( "ОШИБКА: Год ОКОНЧАНИЯ не может быть раньше года НАЧАЛА! " ).show().fadeOut( 8000 );
+					event.preventDefault();
+				return false;
+			}
+			else if (month_cond & year_cond_eq){
+				$( "#errors" ).text( "ОШИБКА: Месяц ОКОНЧАНИЯ не может быть раньше месяца НАЧАЛА!" ).show().fadeOut( 8000 );
+					event.preventDefault();
+				return false;
+			}
+			
+			var res=$.post(
+					$(this).attr("action"),
+					$(this).serialize(),
+					void(0)
+				).html();
+				
+				return;
+		});	
+		
+		</script>
+	</body>
+</html>
